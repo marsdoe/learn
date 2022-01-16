@@ -1,0 +1,79 @@
+#include <stdio.h>
+int febr(int y)
+{ //该年2月有多少天
+	int feb;
+
+	if ((y % 100 == 0 && y % 400 == 0) || (y % 4 == 0 && y % 100 != 0))
+		feb = 29;
+	else
+		feb = 28;
+	return feb;
+}
+int day(int y, int m)
+{ //该年 某月的第一天是本年的第几天
+	int i;
+	int sum = 1;
+	int a[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+	if ((y % 4 == 0 && y % 100 != 0) || (y % 400 == 0))
+		a[1] = 29;
+	else
+		a[1] = 28;
+	if (m == 1)
+		sum = 1;
+	else
+	{
+		for (i = 2; i <= m; i++)
+		{
+			sum = sum + a[i - 2];
+		}
+	}
+	return (sum);
+}
+
+int weekday(int y, int m)
+{ //某年某月的第一天是星期几
+	int w;
+	w = ((y - 1) * 365 + ((y - 1) / 4) - ((y - 1) / 100) + ((y - 1) / 400) + day(y, m)) % 7;
+	return (w);
+}
+
+int main()
+{ //打印日历
+	int y, m, j, n;
+	printf("请输入年份和月份(空格隔开):");
+	scanf("%d""%d", &y, &m);
+	//printf("%d",weekday(y,m));
+	if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12)
+		n = 31;
+	else if (m == 2)
+		n = febr(y);
+	else
+		n = 30; //n为该月的天数
+	printf("日  一  二  三  四  五  六\n");
+	if (weekday(y, m) != 7)
+	{
+		for (j = 1; j <= weekday(y, m); j++)
+		{
+			printf("    ");
+		}
+	} //打印空格
+
+	if (weekday(y, m) == 7)
+	{ //打印换行
+		for (j = 1; j <= n; j++)
+		{
+			printf("%2d  ", j);
+			if (!j % 7)
+				printf("\n");
+		}
+	}
+	else
+	{
+		for (j = 1; j <= n; j++)
+		{
+			printf("%2d  ", j);
+			if (j % 7 == 7 - weekday(y, m))
+				printf("\n");
+		}
+	}
+}
